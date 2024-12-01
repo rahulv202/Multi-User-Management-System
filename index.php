@@ -22,6 +22,13 @@ session_start();
 use App\Core\Router;
 
 $router = new Router();
-
+// Define routes
+$router->get('/login', 'loginController@index');
+$router->get('/register', 'registerController@index');
+$router->get('/dashboard', 'dashboardController@dashboard');
+$router->get('/logout', 'logoutController@logout');
+$router->get('/', 'homeController@index');
+$router->post('/submit-login', 'loginController@login');
+$router->post('/submit-register', 'registerController@register');
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
