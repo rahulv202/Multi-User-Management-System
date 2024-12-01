@@ -6,24 +6,38 @@ class Router
 {
     private $routes = [];
 
-    public function get($uri, $controller)
+    public function get($uri, $controller, $middleware = [])
     {
-        $this->routes['GET'][$uri] = $controller;
+        $this->routes['GET'][$uri] = ['controller' => $controller, 'middleware' => $middleware];
     }
 
-    public function post($uri, $controller)
+    public function post($uri, $controller, $middleware = [])
     {
-        $this->routes['POST'][$uri] = $controller;
+        $this->routes['POST'][$uri] = ['controller' => $controller, 'middleware' => $middleware];
     }
 
     public function dispatch($uri, $method)
     {
         if (isset($this->routes[$method][$uri])) {
-            list($controller, $action) = explode('@', $this->routes[$method][$uri]);
+            $route = $this->routes[$method][$uri];
 
-            $controllerClass = "App\\Controllers\\$controller";
-            $controllerInstance = new $controllerClass();
-            $controllerInstance->$action();
+            // Execute middleware
+            $request = []; // Custom request array
+            $next = function ($request) use ($route) {
+                list($controller, $action) = explode('@', $route['controller']);
+                $controllerClass = "App\\Controllers\\$controller";
+                $controllerInstance = new $controllerClass();
+                return $controllerInstance->$action($request);
+            };
+
+            foreach ($route['middleware'] as $middlewareClass) {
+                $middlewareInstance = new $middlewareClass();
+                $next = function ($request) use ($middlewareInstance, $next) {
+                    return $middlewareInstance->handle($request, $next);
+                };
+            }
+
+            return $next($request);
         } else {
             http_response_code(404);
             echo "404 Not Found";

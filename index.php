@@ -20,15 +20,20 @@ spl_autoload_register(function ($class) {
 session_start();
 
 use App\Core\Router;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\ApiAuthMiddleware;
 
 $router = new Router();
 // Define routes
-$router->get('/login', 'loginController@index');
-$router->get('/register', 'registerController@index');
-$router->get('/dashboard', 'dashboardController@dashboard');
-$router->get('/logout', 'logoutController@logout');
-$router->get('/', 'homeController@index');
-$router->post('/submit-login', 'loginController@login');
-$router->post('/submit-register', 'registerController@register');
+$router->get('/login', 'loginController@index', [AuthMiddleware::class]);
+$router->get('/register', 'registerController@index', [AuthMiddleware::class]);
+$router->get('/dashboard', 'dashboardController@dashboard', [AuthMiddleware::class]);
+$router->get('/logout', 'logoutController@logout', [AuthMiddleware::class]);
+$router->get('/', 'homeController@index', [AuthMiddleware::class]);
+$router->post('/submit-login', 'loginController@login', [AuthMiddleware::class]);
+$router->post('/submit-register', 'registerController@register', [AuthMiddleware::class]);
+// API route with ApiAuthMiddleware
+$router->get('/api/user', 'ApiController@getUser', [ApiAuthMiddleware::class]);
+
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
