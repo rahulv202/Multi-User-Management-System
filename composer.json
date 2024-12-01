@@ -1,0 +1,9 @@
+{
+    "name": "demo/multi-user_management_system",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "require": {}
+}
