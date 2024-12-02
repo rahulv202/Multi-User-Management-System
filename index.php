@@ -22,16 +22,18 @@ session_start();
 use App\Core\Router;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\ApiAuthMiddleware;
+use App\Middleware\GuestMiddleware;
 
 $router = new Router();
 // Define routes
-$router->get('/login', 'loginController@index', [AuthMiddleware::class]);
-$router->get('/register', 'registerController@index', [AuthMiddleware::class]);
-$router->get('/dashboard', 'dashboardController@dashboard', [AuthMiddleware::class]);
+$router->get('/login', 'LoginController@index', [GuestMiddleware::class]);
+$router->get('/register', 'RegisterController@index', [GuestMiddleware::class]);
+$router->get('/dashboard', 'DashboardController@dashboard', [AuthMiddleware::class]);
 $router->get('/logout', 'logoutController@logout', [AuthMiddleware::class]);
 $router->get('/', 'homeController@index', [AuthMiddleware::class]);
-$router->post('/submit-login', 'loginController@login', [AuthMiddleware::class]);
-$router->post('/submit-register', 'registerController@register', [AuthMiddleware::class]);
+$router->post('/submit-login', 'LoginController@login', [GuestMiddleware::class]);
+$router->post('/submit-register', 'RegisterController@register', [GuestMiddleware::class]);
+$router->get('/user-list', 'AdminController@userList');
 // API route with ApiAuthMiddleware
 $router->get('/api/user', 'ApiController@getUser', [ApiAuthMiddleware::class]);
 

@@ -13,7 +13,7 @@ class Controller
         //include __DIR__ . "/../views/{$view}.php";
         $path = str_replace("\\", DIRECTORY_SEPARATOR, $view);
         $path = str_replace(".", DIRECTORY_SEPARATOR, $path);
-        $file = APP_ROOT . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . $path . '.php';
+        $file = APP_ROOT . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . $path . '.php';
         //echo $file;
         if (file_exists($file)) {
             extract($data);

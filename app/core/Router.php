@@ -18,16 +18,22 @@ class Router
 
     public function dispatch($uri, $method)
     {
+
         if (isset($this->routes[$method][$uri])) {
             $route = $this->routes[$method][$uri];
+            //print_r($route);
 
             // Execute middleware
             $request = []; // Custom request array
             $next = function ($request) use ($route) {
                 list($controller, $action) = explode('@', $route['controller']);
                 $controllerClass = "App\\Controllers\\$controller";
+                //echo $action;
+
                 $controllerInstance = new $controllerClass();
-                return $controllerInstance->$action($request);
+
+                $controllerInstance->$action($request);
+                return;
             };
 
             foreach ($route['middleware'] as $middlewareClass) {

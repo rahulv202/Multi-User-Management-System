@@ -7,7 +7,7 @@ use App\Models\User;
 
 class RegisterController extends Controller
 {
-    public function registerForm()
+    public function index()
     {
         $this->render('register');
     }

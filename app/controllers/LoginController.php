@@ -9,6 +9,7 @@ class LoginController extends Controller
 {
     public function index()
     {
+        //echo "LoginController@index called successfully";
         $this->render('login');
     }
 

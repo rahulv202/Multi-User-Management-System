@@ -9,7 +9,7 @@ return [
     'db' => [
         'host' => 'localhost',
         'port' => 3306,
-        'name' => 'my_database',
+        'name' => 'authdb',
         'user' => 'root',
         'password' => '',
     ],
