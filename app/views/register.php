@@ -14,6 +14,7 @@
         <input type="text" name="role" placeholder="Role" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Register</button>
+        <p><a href="/login">Login</a></p>
     </form>
 </body>
 
