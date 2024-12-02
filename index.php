@@ -35,6 +35,9 @@ $router->get('/', 'DashboardController@index', [AuthMiddleware::class]);
 $router->post('/submit-login', 'LoginController@login', [GuestMiddleware::class]);
 $router->post('/submit-register', 'RegisterController@register', [GuestMiddleware::class]);
 $router->get('/user-list', 'AdminController@userList', [AuthAdminRoleMiddleware::class]);
+$router->get('/edit-user', 'AdminController@edit_user', [AuthAdminRoleMiddleware::class]);
+$router->post("/submit-edit_user", 'AdminController@submit_edit_user', [AuthAdminRoleMiddleware::class]);
+$router->get('/delete-user', 'AdminController@delete_user', [AuthAdminRoleMiddleware::class]);
 // API route with ApiAuthMiddleware
 $router->get('/api/user', 'ApiController@getUser', [ApiAuthMiddleware::class]);
 

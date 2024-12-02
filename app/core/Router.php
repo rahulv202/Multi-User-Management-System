@@ -18,6 +18,9 @@ class Router
 
     public function dispatch($uri, $method)
     {
+        // Strip query parameters from the URI
+        $uri = strtok($uri, '?');
+
 
         if (isset($this->routes[$method][$uri])) {
             $route = $this->routes[$method][$uri];

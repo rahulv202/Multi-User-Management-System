@@ -27,9 +27,18 @@ class User extends Database
     {
         $this->db->query("INSERT INTO {$this->table} (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')");
     }
+    public function update($id, $name, $email, $role)
+    {
+        $this->db->query("UPDATE {$this->table} SET name = '$name', email = '$email', role = '$role' WHERE id = $id");
+    }
 
     public function getAll()
     {
         return $this->db->query("SELECT * FROM {$this->table}")->fetchAll();
+    }
+
+    public function delete_user($id)
+    {
+        $this->db->query("DELETE FROM {$this->table} WHERE id = $id");
     }
 }
