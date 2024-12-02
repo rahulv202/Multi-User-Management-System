@@ -21,7 +21,7 @@ class LoginController extends Controller
         $user = (new User())->findByEmail($email);
 
         if ($user && password_verify($password, $user['password'])) {
-            session_start();
+            // session_start();
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
 

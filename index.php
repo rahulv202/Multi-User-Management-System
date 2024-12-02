@@ -6,7 +6,7 @@ require_once APP_ROOT . '\vendor\autoload.php';
 
 // Load Configuration
 $config = require APP_ROOT . '\app\config\config.php';
-
+define('CONFIG', $config);
 // Autoloader for namespaced classes
 spl_autoload_register(function ($class) {
     // $class = str_replace('\\', '/', $class);
