@@ -15,16 +15,7 @@ class DashboardController extends Controller
         $this->render('dashboard', array('users' => $users));
     }
 
-    public function user_list()
-    {
-        if ($_SESSION["role"] == "Admin") {
-            $user = new User();
-            $users = $user->getAll();
-            $this->render('user_list', array('users' => $users));
-        } else {
-            $this->redirect('dashboard'); // redirect to dashboard
-        }
-    }
+
 
     public function logout()
     {

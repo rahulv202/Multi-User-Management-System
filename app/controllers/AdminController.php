@@ -9,8 +9,8 @@ class AdminController extends Controller
 {
     public function userList()
     {
-        session_start();
-        if ($_SESSION['role'] !== 'admin') {
+
+        if ($_SESSION['role'] !== 'Admin') {
             $this->redirect('/dashboard');
         }
 

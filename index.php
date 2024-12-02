@@ -22,6 +22,7 @@ session_start();
 use App\Core\Router;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\ApiAuthMiddleware;
+use App\Middleware\AuthAdminRoleMiddleware;
 use App\Middleware\GuestMiddleware;
 
 $router = new Router();
@@ -33,7 +34,7 @@ $router->get('/logout', 'DashboardController@logout', [AuthMiddleware::class]);
 $router->get('/', 'DashboardController@index', [AuthMiddleware::class]);
 $router->post('/submit-login', 'LoginController@login', [GuestMiddleware::class]);
 $router->post('/submit-register', 'RegisterController@register', [GuestMiddleware::class]);
-$router->get('/user-list', 'AdminController@userList');
+$router->get('/user-list', 'AdminController@userList', [AuthAdminRoleMiddleware::class]);
 // API route with ApiAuthMiddleware
 $router->get('/api/user', 'ApiController@getUser', [ApiAuthMiddleware::class]);
 
