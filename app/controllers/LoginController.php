@@ -30,22 +30,4 @@ class LoginController extends Controller
             $this->render('login', ['error' => 'Invalid credentials.']);
         }
     }
-
-    public function dashboard()
-    {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-
-        $user = (new User())->find($_SESSION['user_id']);
-        $this->render('dashboard', ['user' => $user]);
-    }
-
-    public function logout()
-    {
-        session_start();
-        session_destroy();
-        $this->redirect('/login');
-    }
 }

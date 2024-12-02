@@ -17,7 +17,7 @@ class RegisterController extends Controller
         $name = $_POST['name'];
         $email = $_POST['email'];
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-        $role = 'user'; // Default role
+        $role = $_POST['role']; //'user'; // Default role
 
         $userModel = new User();
         if ($userModel->findByEmail($email)) {
