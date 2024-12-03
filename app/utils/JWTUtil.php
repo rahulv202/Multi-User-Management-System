@@ -13,7 +13,7 @@ class JWTUtil
 
     public function __construct($config)
     {
-        $this->secret = $config['secret'];
+        $this->secret = $config['jwt_secret'];
         $this->algorithm = $config['algorithm'];
         $this->expiry = $config['expiry'];
     }
