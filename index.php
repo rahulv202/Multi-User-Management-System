@@ -7,16 +7,16 @@ require_once APP_ROOT . '\vendor\autoload.php';
 // Load Configuration
 $config = require APP_ROOT . '\app\config\config.php';
 define('CONFIG', $config);
-// Autoloader for namespaced classes
-spl_autoload_register(function ($class) {
-    // $class = str_replace('\\', '/', $class);
-    // require_once APP_ROOT . '/' . $class . '.php';
-    $classFile = str_replace('\\', DIRECTORY_SEPARATOR, $class . '.php');
-    $classPath = APP_ROOT . '/app/' . $classFile;
-    if (file_exists($classPath)) {
-        require_once $classPath;
-    }
-});
+// Autoloader for namespaced classes. Custom autoloader function Custom PHP Autoloader (Without Composer)
+// spl_autoload_register(function ($class) {
+//     // $class = str_replace('\\', '/', $class);
+//     // require_once APP_ROOT . '/' . $class . '.php';
+//     $classFile = str_replace('\\', DIRECTORY_SEPARATOR, $class . '.php');
+//     $classPath = APP_ROOT . '/app/' . $classFile;
+//     if (file_exists($classPath)) {
+//         require_once $classPath;
+//     }
+// });
 session_start();
 
 use App\Core\Router;
@@ -39,7 +39,12 @@ $router->get('/edit-user', 'AdminController@edit_user', [AuthAdminRoleMiddleware
 $router->post("/submit-edit_user", 'AdminController@submit_edit_user', [AuthAdminRoleMiddleware::class]);
 $router->get('/delete-user', 'AdminController@delete_user', [AuthAdminRoleMiddleware::class]);
 // API route with ApiAuthMiddleware
-$router->get('/api/user', 'ApiController@getUser', [ApiAuthMiddleware::class]);
+$router->post('/api/login', 'ApiController@login');
+$router->post('/api/register', 'ApiController@register');
+$router->get('/api/user-details', 'ApiController@getUserDetails', [new ApiAuthMiddleware(CONFIG)]);
+$router->get('/api/user-list', 'AdminController@getUserList', [new ApiAuthMiddleware(CONFIG)]);
+$router->post('/api/edit-user', 'AdminController@editUser', [new ApiAuthMiddleware(CONFIG)]);
+$router->post('/api/delete-user', 'AdminController@deleteUser', [new ApiAuthMiddleware(CONFIG)]);
 
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
