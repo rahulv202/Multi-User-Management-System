@@ -15,8 +15,10 @@ return [
     ],
 
     // Security Settings
-    'jwt_secret' => 'supersecretkey12345',
-    'session_lifetime' => 3600, // in seconds
+    'jwt_secret' => 'Q8SJMnNPf+tqfHUr7HhlS8VecgkDfHNjXGFdZsFtkDc=',
+    'algorithm' => 'HS256',
+    'expiry' => 3600, // Token validity in seconds
+    // 'session_lifetime' => 3600, // in seconds
 
     // Email Settings (optional)
     'email' => [
