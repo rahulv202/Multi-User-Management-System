@@ -41,6 +41,7 @@ class ApiController extends Controller
         $name = $data['name'] ?? null;
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
+        $role = $data['role'] ?? null;
 
         if ($this->userModel->findByEmail($email)) {
             http_response_code(400);
@@ -49,7 +50,7 @@ class ApiController extends Controller
         }
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        $this->userModel->create(['name' => $name, 'email' => $email, 'password' => $hashedPassword]);
+        $this->userModel->create($name, $email, $hashedPassword, $role);
 
         echo json_encode(['message' => 'Registration successful']);
     }
