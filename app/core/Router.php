@@ -38,13 +38,23 @@ class Router
                 $controllerInstance->$action($request);
                 return;
             };
+            //print_r($route['middleware']);
+            foreach ($route['middleware'] as $middlewareClassOrInstance) {
+                // Determine if the middleware is an instance or a class name
+                if (is_string($middlewareClassOrInstance)) {
+                    // Instantiate if it's a class name (string)
+                    $middlewareInstance = new $middlewareClassOrInstance();
+                } else {
+                    // Use as-is if it's already an instance
+                    $middlewareInstance = $middlewareClassOrInstance;
+                }
 
-            foreach ($route['middleware'] as $middlewareClass) {
-                $middlewareInstance = new $middlewareClass();
+                // Chain the middleware
                 $next = function ($request) use ($middlewareInstance, $next) {
                     return $middlewareInstance->handle($request, $next);
                 };
             }
+
 
             return $next($request);
         } else {

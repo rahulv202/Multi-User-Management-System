@@ -55,9 +55,10 @@ class ApiController extends Controller
         echo json_encode(['message' => 'Registration successful']);
     }
 
-    public function getUserDetails($request)
+    public function getUserDetails()
     {
-        $user = $request['user'];
-        echo json_encode(['user' => $user]);
+        // $user = $request['user'];
+
+        echo json_encode(['user' => $this->userModel->getAll()]);
     }
 }
