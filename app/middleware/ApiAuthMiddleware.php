@@ -6,6 +6,7 @@ namespace App\Middleware;
 // use Firebase\JWT\JWT;
 // use Firebase\JWT\Key;
 use App\Utils\JWTUtil;
+use App\Models\User;
 
 class ApiAuthMiddleware implements MiddlewareInterface
 {
@@ -39,23 +40,29 @@ class ApiAuthMiddleware implements MiddlewareInterface
 
     public function handle($request, $next)
     {
-        $headers = getallheaders();
-        if (!isset($headers['Authorization'])) {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        if (strpos($authHeader, 'Bearer ') !== 0) {
             http_response_code(401);
-            echo json_encode(['error' => 'Authorization token is required.']);
+            echo json_encode(['message' => 'Unauthorized']);
             return;
         }
 
-        $token = str_replace('Bearer ', '', $headers['Authorization']);
-        $user = $this->jwtUtil->validateToken($token);
+        $token = substr($authHeader, 7);
 
-        if (!$user) {
+        try {
+            // Decode token and verify logout time
+            $decoded = $this->jwtUtil->verify($token, null);
+
+            $userModel = new User();
+            $logoutTime = $userModel->getLogoutTime($decoded->id);
+            $this->jwtUtil->verify($token, $logoutTime);
+            $request['user'] = $decoded;
+        } catch (\Exception $e) {
             http_response_code(401);
-            echo json_encode(['error' => 'Invalid or expired token.']);
+            echo json_encode(['message' => $e->getMessage()]);
             return;
         }
 
-        $request['user'] = $user; // Pass the decoded user to the next middleware or controller
         return $next($request);
     }
 }

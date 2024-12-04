@@ -41,4 +41,19 @@ class User extends Database
     {
         $this->db->query("DELETE FROM {$this->table} WHERE id = $id");
     }
+
+    public function updateLogoutTime($userId)
+    {
+        $this->db->query("UPDATE {$this->table} SET logout_time = NOW() WHERE id = $userId");
+    }
+
+    public function updateLogoutTimeRomve($userId)
+    {
+        $this->db->query("UPDATE {$this->table} SET logout_time = null WHERE id = $userId");
+    }
+
+    public function getLogoutTime($userId)
+    {
+        return $this->db->query("SELECT logout_time FROM {$this->table} WHERE id = $userId")->fetchColumn();
+    }
 }

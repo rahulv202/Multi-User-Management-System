@@ -25,6 +25,7 @@ class ApiController extends Controller
         $password = $data['password'] ?? null;
 
         $user = $this->userModel->findByEmail($email);
+        $users = $this->userModel->updateLogoutTimeRomve($user['id']);
         if (!$user || !password_verify($password, $user['password'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Invalid email or password.']);
@@ -55,10 +56,38 @@ class ApiController extends Controller
         echo json_encode(['message' => 'Registration successful']);
     }
 
-    public function getUserDetails()
+    public function getUserDetails($request)
     {
-        // $user = $request['user'];
+        //print_r($request);
+        $user = $request; //['user'];
+        echo json_encode(['user' => $user]);
+    }
+    public function logout($request)
+    {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        if (strpos($authHeader, 'Bearer ') !== 0) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid Authorization header.']);
+            return;
+        }
 
-        echo json_encode(['user' => $this->userModel->getAll()]);
+        $token = substr($authHeader, 7); // Extract token
+
+        // Decode the token to identify the user
+        $jwtUtil = new JWTUtil(CONFIG);
+        try {
+            $decoded = $jwtUtil->verify($token, null);
+        } catch (\Exception $e) {
+            http_response_code(401);
+            echo json_encode(['message' => 'Invalid token.']);
+            return;
+        }
+
+        // Update user's logout_time in the database
+        $userModel = new User();
+        $userModel->updateLogoutTime($decoded->id);
+
+        http_response_code(200);
+        echo json_encode(['message' => 'Successfully logged out.']);
     }
 }

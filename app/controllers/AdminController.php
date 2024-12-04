@@ -49,4 +49,59 @@ class AdminController extends Controller
         (new User())->delete_user($id);
         $this->redirect('/user-list');
     }
+
+    public function getUserList($request)
+    {
+        // print_r($request['user']->role);
+        if ($request['user']->role !== 'Admin') {
+            //$this->redirect('/api/user-details');
+            echo json_encode(['error' => 'Unauthorized access.']);
+            return;
+        }
+        $users = (new User())->getAll();
+        echo json_encode(['users' => $users]);
+    }
+
+    public function editUser($request)
+    {
+        if ($request['user']->role !== 'Admin') {
+            // $this->redirect('/api/user-details');
+            echo json_encode(['error' => 'Unauthorized access.']);
+            return;
+        }
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id = $data['id'] ?? null;
+        $name = $data['name'] ?? null;
+        $email = $data['email'] ?? null;
+        $role = $data['role'] ?? null;
+
+        if (!$id || !(new User())->find($id)) {
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found.']);
+            return;
+        }
+
+        (new User())->update($id, $name, $email, $role);
+        echo json_encode(['message' => 'User updated successfully']);
+    }
+
+    public function deleteUser($request)
+    {
+        if ($request['user']->role !== 'Admin') {
+            // $this->redirect('/api/user-details');
+            echo json_encode(['error' => 'Unauthorized access.']);
+            return;
+        }
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id = $data['id'] ?? null;
+
+        if (!$id || !(new User())->find($id)) {
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found.']);
+            return;
+        }
+
+        (new User())->delete_user($id);
+        echo json_encode(['message' => 'User deleted successfully']);
+    }
 }

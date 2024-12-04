@@ -26,12 +26,20 @@ class JWTUtil
         return JWT::encode($payload, $this->secret, $this->algorithm);
     }
 
-    public function validateToken($token)
+    // public function validateToken($token)
+    // {
+    //     try {
+    //         return JWT::decode($token, new Key($this->secret, $this->algorithm));
+    //     } catch (\Exception $e) {
+    //         return null;
+    //     }
+    // }
+    public function verify($token, $logoutTime)
     {
-        try {
-            return JWT::decode($token, new Key($this->secret, $this->algorithm));
-        } catch (\Exception $e) {
-            return null;
+        $decoded = JWT::decode($token, new Key($this->secret, $this->algorithm));
+        if ($decoded->iat < strtotime($logoutTime)) {
+            throw new \Exception('Token invalid due to logout');
         }
+        return $decoded;
     }
 }

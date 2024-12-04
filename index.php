@@ -45,6 +45,8 @@ $router->get('/api/user-details', 'ApiController@getUserDetails', [new ApiAuthMi
 $router->get('/api/user-list', 'AdminController@getUserList', [new ApiAuthMiddleware(CONFIG)]);
 $router->post('/api/edit-user', 'AdminController@editUser', [new ApiAuthMiddleware(CONFIG)]);
 $router->post('/api/delete-user', 'AdminController@deleteUser', [new ApiAuthMiddleware(CONFIG)]);
+$router->post('/api/logout', 'ApiController@logout', [new ApiAuthMiddleware(CONFIG)]);
+
 
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
