@@ -79,8 +79,8 @@ index.php          # Entry point for the application And SetUp IN Root Directory
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-repo/multi-user-management-system.git
-   cd multi-user-management-system
+   git clone https://github.com/rahulv202/Multi-User-Management-System
+   cd Multi-User-Management-System
    ```
 
 2. **Install Dependencies:**
